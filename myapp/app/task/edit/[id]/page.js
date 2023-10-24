@@ -1,11 +1,11 @@
 'use client'
 
 import React, {useEffect, useState} from 'react'
-import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react'
 
 const EditTask = (ctx) => {
     const [taskData, setTaskData] = useState({
@@ -15,9 +15,8 @@ const EditTask = (ctx) => {
     })
     const router = useRouter()
     const {data: session, status} = useSession()
-    
 
-    const fetchData = (taskId) => {
+    const fetchData = (taskId) =>{
         axios.get(`/api/task/${taskId}`)
         .then((response) => {
             setTaskData(response.data)
@@ -32,18 +31,17 @@ const EditTask = (ctx) => {
         }
     }, [ctx.params.id, status])
 
-const handleEditTask = async (e) => {
-    try {
-        let response = await axios.put(`/api/task/${ctx.params.id}`, taskData);
-        console.log("Task Updated", response.data)
-    } catch (error) {
-        console.error("Error Updating", error)
+    const handleEditTask = async (e) => {
+        try {
+            let response = await axios.put(`/api/task/${ctx.params.id}`, taskData)
+            console.log("Task Updated", response.data)
+        } catch (error) {
+            console.error("Error", error)
+        }
     }
-}
-
   return (
     <section className='px-4 py-8 max-w-screen-xl mx-auto'>
-        <form className='py-8' onSubmit={handleEditTask}>
+        <form className='py-4' onSubmit={handleEditTask}> 
         <label className='mr-2'>Title: </label>
         <input
         className='input input-bordered input-primary w-full mb-4'
@@ -55,10 +53,11 @@ const handleEditTask = async (e) => {
         <SimpleMDE
         value={taskData.desc}
         onChange={(value) => setTaskData({...taskData, desc: value})}
-        />
+        >
+        </SimpleMDE>
         </div>
         <div className='mb-4'>
-            <label className='mr-2'>Status: </label>
+        <label className='mr-2'>Status:</label>
         <select
         className='select select-bordered select-sm w-full'
         value={taskData.status}
@@ -72,9 +71,12 @@ const handleEditTask = async (e) => {
         <div className='mb-4'>
         <button
         className='btn btn-wide'
-        type='submit'>Update Task</button>
+        type='submit'
+        >
+            Update Task
+        </button>
         </div>
-        </form>
+       </form>
     </section>
   )
 }

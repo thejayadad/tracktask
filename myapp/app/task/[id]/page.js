@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {useSession} from "next-auth/react"
 
-const SingleTask = (ctx) => {
-    const [task, setTask] = useState(null);
+const SingleTask = (ctx) => {    
+    const [task, setTask] = useState(null)
     const router = useRouter()
     const {data: session, status} = useSession()
-    
-    const fetchData = (taskId) => {
+
+    const fetchData = (taskId)=> {
         axios.get(`/api/task/${taskId}`)
         .then((response) => {
             setTask(response.data)
@@ -20,7 +20,6 @@ const SingleTask = (ctx) => {
             console.error("Error", error)
         })
     }
-
     useEffect(() => {
         if(status === 'authenticated'){
             fetchData(ctx.params.id)
@@ -37,14 +36,12 @@ const SingleTask = (ctx) => {
             router.push('/task')
         })
         .catch((error) => {
-            console.error("Error Deleting Task", error)
+            console.error("Error", error)
         })
     }
     if(!task){
-        return <p className='text-center'>Loading Task</p>
+        return <p className='text-center'>Loading Task....</p>
     }
- 
-   
   return (
     <section className='px-4 py-8 max-w-screen-xl mx-auto'>
         <h2>Single Task</h2>
@@ -59,21 +56,23 @@ const SingleTask = (ctx) => {
         </thead>
         <tbody>
             <tr key={task._id}>
-            <td className='border border-gray-300 text-center py-2'>{task.title}</td>
-            <td className='border border-gray-300 text-center py-2'>{task.desc}</td>
-            <td className='border border-gray-300 text-center py-2'>{task.status}</td>
-            <td className='border border-gray-300 text-center py-2'>
-                <Link 
+                <td className='border border-gray-300 text-center py-2'>{task.title}</td>
+                <td className='border border-gray-300 text-center py-2'>{task.desc}</td>
+                <td className='border border-gray-300 text-center py-2'>{task.status}</td>
+                <td className='border border-gray-300 text-center py-2'>
+                <Link
                 href={`/task/edit/${ctx.params.id}`}
-                className='bg-gray-400 hover:bg-gray-500 font-medium py-2 px-4 ml-2'
+                className='bg-gray-400 hover:bg-gray-500 py-2 font-medium px-4'
                 >
                     Edit
                 </Link>
                 <button
                 onClick={handleDeleteTask}
-                className='bg-red-500 hover:bg-red-600 ml-2 py-2 px-4'
-                >Delete</button>
-            </td>
+                className='bg-red-400 hover:bg-red-500 py-2 px-4 ml-2'
+                >
+                    Delete
+                </button>
+                </td>
             </tr>
         </tbody>
         </table>
